@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Eaat.Contracts\Eaat.Models.csproj" />
+    <ProjectReference Include="..\Eaat.Models\Eaat.Models.csproj" />
   </ItemGroup>
 
 </Project>

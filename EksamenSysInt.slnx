@@ -1,7 +1,8 @@
 <Solution>
-  <Project Path="Eaat.Contracts/Eaat.Models.csproj" />
+  <Project Path="Eaat.API/Eaat.API.csproj" Id="8e538ed5-e3bf-406f-af02-7f995e899b87" />
   <Project Path="Eaat.CourierService/Eaat.CourierService.csproj" />
+  <Project Path="Eaat.Database/Eaat.Database.csproj" />
+  <Project Path="Eaat.Models/Eaat.Models.csproj" Id="6d30d643-bed1-4ca4-960e-1f4b9eb9d6c1" />
   <Project Path="Eaat.RabbitMQService/Eaat.RabbitMQService.csproj" />
   <Project Path="Eaat.RestaurantService/Eaat.RestaurantService.csproj" />
-  <Project Path="OrderAPI/Eaat.Api.csproj" />
 </Solution>

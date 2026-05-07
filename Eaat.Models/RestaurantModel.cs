@@ -4,5 +4,5 @@ using System.Text;
 
 namespace Eaat.Models
 {
-    public record RestaurantModel(Guid RestaurantId, string restaurantName);   
+    public record RestaurantModel(Guid RestaurantId, string restaurantName);
 }

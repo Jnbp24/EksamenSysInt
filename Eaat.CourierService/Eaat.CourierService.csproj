@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eaat.Database\Eaat.Database.csproj" />
     <ProjectReference Include="..\Eaat.RabbitMQService\Eaat.RabbitMQService.csproj" />
   </ItemGroup>
 
