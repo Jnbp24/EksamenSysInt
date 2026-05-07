@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Eaat.Contracts/Eaat.Models.csproj" />
+  <Project Path="Eaat.CourierService/Eaat.CourierService.csproj" />
+  <Project Path="Eaat.RabbitMQService/Eaat.RabbitMQService.csproj" />
+  <Project Path="Eaat.RestaurantService/Eaat.RestaurantService.csproj" />
+  <Project Path="OrderAPI/Eaat.Api.csproj" />
+</Solution>
