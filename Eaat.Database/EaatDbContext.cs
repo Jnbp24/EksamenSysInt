@@ -1,16 +1,17 @@
-﻿using Eaat.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Eaat.CourierService
+namespace Eaat.Database
 {
-    public class CourierDbContext : DbContext
+    public class EaatDbContext : DbContext
     {
-        public CourierDbContext(DbContextOptions<CourierDbContext> options) : base(options) {  }
+        public EaatDbContext(DbContextOptions<EaatDbContext> options) : base(options) { }
+
         public DbSet<OrderClaim> OrderClaims => Set<OrderClaim>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderClaim>()
-                .HasKey(x => x.Id); // NEW PK
+                .HasKey(x => x.Id);
 
             modelBuilder.Entity<OrderClaim>()
                 .HasIndex(x => x.OrderId)

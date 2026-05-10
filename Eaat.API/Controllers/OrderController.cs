@@ -1,5 +1,6 @@
 using Eaat.Models;
 using Eaat.RabbitMQService;
+using Eaat.Resilience;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eaat.Api.Controllers
@@ -15,11 +16,23 @@ namespace Eaat.Api.Controllers
             _publisher = publisher;
         }
 
-        [HttpPost]
         public async Task<IActionResult> PlaceOrder([FromBody] OrderPlaced order)
         {
-            await _publisher.PublishOrderPlacedAsync(order);
-            return Ok($"Order {order.OrderId} placed successfully");
+            try
+            {
+                // Use API pipeline - shorter timeout, fewer retries as opposed to resilience handling for RabbitMQ
+                await ResiliencePipelines.Api.ExecuteAsync(async ct =>
+                {
+                    await _publisher.PublishOrderPlacedAsync(order);
+                });
+
+                return Ok($"Order {order.OrderId} placed successfully");
+            }
+            catch (Exception ex)
+            {
+                // If all retries fail or circuit breaker is open, return 503
+                return StatusCode(503, $"Service currently unavailable. Please try again later - {ex.Message}");
+            }
         }
     }
 }

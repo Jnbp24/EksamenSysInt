@@ -4,5 +4,6 @@
   <Project Path="Eaat.Database/Eaat.Database.csproj" />
   <Project Path="Eaat.Models/Eaat.Models.csproj" Id="6d30d643-bed1-4ca4-960e-1f4b9eb9d6c1" />
   <Project Path="Eaat.RabbitMQService/Eaat.RabbitMQService.csproj" />
+  <Project Path="Eaat.Resilience/Eaat.Resilience.csproj" Id="2541cc2f-b5b3-4063-8777-2bc8fd852af7" />
   <Project Path="Eaat.RestaurantService/Eaat.RestaurantService.csproj" />
 </Solution>

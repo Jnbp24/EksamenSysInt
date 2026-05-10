@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Eaat.Models\Eaat.Models.csproj" />
+    <ProjectReference Include="..\Eaat.Resilience\Eaat.Resilience.csproj" />
   </ItemGroup>
 
 </Project>
