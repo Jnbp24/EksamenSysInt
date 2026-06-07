@@ -7,6 +7,7 @@ namespace Eaat.Database
         public EaatDbContext(DbContextOptions<EaatDbContext> options) : base(options) { }
 
         public DbSet<OrderClaim> OrderClaims => Set<OrderClaim>();
+        public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

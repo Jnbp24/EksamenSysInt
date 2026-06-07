@@ -19,6 +19,7 @@ namespace Eaat.Api
             var rabbitConnection = await RabbitMQConnection.CreateAsync();
             builder.Services.AddSingleton(rabbitConnection);
             builder.Services.AddSingleton<RabbitMQPublisher>();
+            builder.Services.AddHostedService<OutboxProcessor>();
 
             var app = builder.Build();
 
@@ -38,6 +39,7 @@ namespace Eaat.Api
             using var scope = app.Services.CreateScope();
             var dbFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<EaatDbContext>>();
             await using var db = await dbFactory.CreateDbContextAsync();
+            db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
         }
 

@@ -1,7 +1,10 @@
+using Eaat.Database;
 using Eaat.Models;
 using Eaat.RabbitMQService;
 using Eaat.Resilience;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Eaat.Api.Controllers
 {
@@ -9,29 +12,43 @@ namespace Eaat.Api.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly RabbitMQPublisher _publisher;
+        private readonly IDbContextFactory<EaatDbContext> _dbFactory;
 
-        public OrderController(RabbitMQPublisher publisher)
+        public OrderController(
+            IDbContextFactory<EaatDbContext> dbFactory)
         {
-            _publisher = publisher;
+            _dbFactory = dbFactory;
         }
 
+        [HttpPost]
         public async Task<IActionResult> PlaceOrder([FromBody] OrderPlaced order)
         {
             try
             {
-                // Use API pipeline - shorter timeout, fewer retries as opposed to resilience handling for RabbitMQ
                 await ResiliencePipelines.Api.ExecuteAsync(async ct =>
                 {
-                    await _publisher.PublishOrderPlacedAsync(order);
+                    await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+                    // Write order + outbox message atomically
+                    await using var transaction =
+                        await db.Database.BeginTransactionAsync(ct);
+
+                    db.OutboxMessages.Add(new OutboxMessage
+                    {
+                        Exchange = "order.placed",
+                        RoutingKey = order.RestaurantId.ToString(),
+                        Payload = JsonSerializer.Serialize(order)
+                    });
+
+                    await db.SaveChangesAsync(ct);
+                    await transaction.CommitAsync(ct);
                 });
 
                 return Ok($"Order {order.OrderId} placed successfully");
             }
             catch (Exception ex)
             {
-                // If all retries fail or circuit breaker is open, return 503
-                return StatusCode(503, $"Service currently unavailable. Please try again later - {ex.Message}");
+                return StatusCode(503, $"Service unavailable - {ex.Message}");
             }
         }
     }

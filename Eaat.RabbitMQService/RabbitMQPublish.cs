@@ -29,5 +29,17 @@ namespace Eaat.RabbitMQService
                 );
             });
         }
+
+        public async Task PublishRawAsync(string exchange, string routingKey, byte[] body)
+        {
+            await ResiliencePipelines.RabbitMQ.ExecuteAsync(async ct =>
+            {
+                await _channel.BasicPublishAsync(
+                    exchange: exchange,
+                    routingKey: routingKey,
+                    body: body
+                );
+            });
+        }
     }
 }
